@@ -89,5 +89,18 @@ class CategoryController
             echo "Lỗi khi xóa danh mục.";
         }
     }
+    public function checkLogin($masv, $password) {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE MaSV = :masv";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':masv', $masv, PDO::PARAM_STR);
+        $stmt->execute();
+        $sinhvien = $stmt->fetch(PDO::FETCH_OBJ);
+    
+        if ($sinhvien && password_verify($password, $sinhvien->password)) {
+            return $sinhvien; // Đăng nhập thành công
+        }
+        return false; // Đăng nhập thất bại
+    }
+    
 }
 ?>
